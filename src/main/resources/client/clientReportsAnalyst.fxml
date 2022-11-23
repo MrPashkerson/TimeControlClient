@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="321.0" prefWidth="475.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.mvc.Controller">
+    <children>
+      <Button fx:id="btnSeeReport" layoutX="170.0" layoutY="200.0" mnemonicParsing="false" onAction="#onSeeReportButtonClick" prefHeight="26.0" prefWidth="136.0" text="Просмотреть отчёты" />
+      <Accordion layoutX="2.0" layoutY="200.0" />
+      <Accordion layoutX="31.0" layoutY="237.0" />
+      <Label fx:id="staticUsername" layoutX="359.0" layoutY="5.0" text="Имя пользователя" />
+      <Button fx:id="btnLogout" layoutX="382.0" layoutY="29.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" prefHeight="26.0" prefWidth="54.0" text="Выйти" />
+      <Button fx:id="btnGenerateReport" layoutX="170.0" layoutY="95.0" mnemonicParsing="false" onAction="#onGenerateReportButtonClick" prefHeight="26.0" prefWidth="136.0" text="Сгенерировать отчёт" />
+    </children>
+</AnchorPane>
