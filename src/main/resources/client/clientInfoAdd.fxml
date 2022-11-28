@@ -10,7 +10,7 @@
       <Accordion layoutX="2.0" layoutY="200.0" />
       <Accordion layoutX="31.0" layoutY="237.0" />
       <Label layoutX="80.0" layoutY="14.0" text="Пользователь" />
-      <Label fx:id="staticStatus" layoutX="99.0" layoutY="44.0" text="Статус" />
+      <Label fx:id="staticStatus" layoutX="91.0" layoutY="39.0" text="добавлен" />
       <Button fx:id="btnOkInfo" layoutX="102.0" layoutY="73.0" mnemonicParsing="false" onAction="#onOkInfoButtonClick" text="OK" />
     </children>
 </AnchorPane>

@@ -1,7 +1,6 @@
 package client.mvc;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
@@ -15,59 +14,61 @@ public class Controller extends View {
     public TextField fieldPort;
     public TextField fieldLogin;
     public TextField fieldPassword;
-    public Label staticAuthError;
-    String isConnected = null;
+    public Label staticUsername;
 
-    public void onLoginButtonClick(ActionEvent event) throws IOException {
-        if(isConnected == null) {
+    public void onLoginButtonClick() throws IOException {
+        if(!Objects.equals(singletonModel.getIsConnected(), "")) {
             fieldPort.setDisable(true);
-            isConnected = model.connectToServer();
-        }
-        if (Objects.equals(isConnected, "")){
-            fieldPort.setDisable(true);
-            fieldLogin.setDisable(true);
-            fieldPassword.setDisable(true);
-            new Thread(new AuthHandler()).start();
-        } else {
-            fieldPort.setDisable(false);
-            staticAuthError.setText(isConnected);
-        }
-    }
-
-    class AuthHandler implements Runnable {
-        @Override
-        public void run() {
-            model.setIp(fieldIP.getText());
+            singletonModel.model.setIp(fieldIP.getText());
             int port = 6568;
             if (isPort(fieldPort.getText())) {
                 port = Integer.parseInt(fieldPort.getText());
             } else {
                 fieldPort.setText(Integer.toString(port));
             }
-            model.setPort(port);
+            singletonModel.model.setPort(port);
 
+            singletonModel.setIsConnected(singletonModel.model.connectToServer());
+            if(!Objects.equals(singletonModel.getIsConnected(), "")) {
+                fieldPort.setDisable(false);
+                staticAuthError.setText(singletonModel.getIsConnected());
+                return;
+            }
+            staticAuthError.setText("");
+        }
+        fieldLogin.setDisable(true);
+        fieldPassword.setDisable(true);
+        new Thread(new AuthHandler()).start();
+    }
+
+    class AuthHandler implements Runnable {
+        @Override
+        public void run() {
             String login = fieldLogin.getText();
             String password = fieldPassword.getText();
             staticAuthError.setTextFill(Color.color(1,0,0));
-            if(login.length() <= 6 || login.length() >= 12) {
+            if(login.length() <= 3 || login.length() >= 16) {
                 Platform.runLater(() -> staticAuthError.setText("Неверный логин!"));
             } else {
-                model.setLogin(login);
-                if(password.length() <= 6 || password.length() >= 12) {
+                singletonModel.model.setLogin(login);
+                if(password.length() <= 3 || password.length() >= 16) {
                     Platform.runLater(() -> staticAuthError.setText("Неверная длина пароля!"));
                 } else {
-                    model.setPassword(password);
-                    staticAuthError.setText("");
-                    try {
-                        model.authorization();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    singletonModel.model.setPassword(password);
+                    Platform.runLater(() -> {
+                        try {
+                            staticAuthError.setText(singletonModel.model.authorization());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
                 }
             }
-            fieldPort.setDisable(false);
             fieldLogin.setDisable(false);
             fieldPassword.setDisable(false);
+            try {
+                staticUsername.setText(login);
+            } catch (Exception ignored) {}
         }
     }
 

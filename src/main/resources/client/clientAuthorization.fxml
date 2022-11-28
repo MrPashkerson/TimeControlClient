@@ -19,7 +19,7 @@
                     <Label layoutX="42.0" layoutY="17.0" text="IP адрес    " />
                     <TextField fx:id="fieldIP" disable="true" layoutX="100.0" layoutY="14.0" prefHeight="26.0" prefWidth="82.0" promptText="127.0.0.1" text="127.0.0.1" />
                     <Label layoutX="256.0" layoutY="18.0" prefHeight="18.0" prefWidth="34.0" text="Порт " />
-                    <TextField fx:id="fieldPort" layoutX="290.0" layoutY="14.0" prefHeight="26.0" prefWidth="82.0" promptText="6568" text="6568" />
+                    <TextField fx:id="fieldPort" disable="true" layoutX="290.0" layoutY="14.0" prefHeight="26.0" prefWidth="82.0" promptText="6568" text="6568" />
                </children>
             </AnchorPane>
          </content>

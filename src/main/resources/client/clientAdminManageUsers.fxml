@@ -10,7 +10,7 @@
         <Button fx:id="btnEditUser" layoutX="148.0" layoutY="200.0" mnemonicParsing="false" onAction="#onEditUserButtonClick" prefHeight="26.0" prefWidth="176.0" text="Редактировать пользователя" />
       <Accordion layoutX="2.0" layoutY="200.0" />
       <Accordion layoutX="31.0" layoutY="237.0" />
-      <Label fx:id="staticUsername" layoutX="359.0" layoutY="5.0" text="Имя пользователя" />
+      <Label fx:id="staticUsername" layoutX="366.0" layoutY="5.0" text="Администратор" />
       <Button fx:id="btnLogout" layoutX="382.0" layoutY="29.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" prefHeight="26.0" prefWidth="54.0" text="Выйти" />
       <Button fx:id="btnAddUser" layoutX="148.0" layoutY="95.0" mnemonicParsing="false" onAction="#onAddUserButtonClick" prefHeight="26.0" prefWidth="176.0" text="Добавить пользователя" />
       <Button fx:id="btnReturn" layoutX="16.0" layoutY="10.0" mnemonicParsing="false" onAction="#onReturnButtonClick" text="&lt;-" />

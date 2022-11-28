@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.mvc.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.mvc.UserFormController">
    <children>
-      <Label layoutX="14.0" layoutY="36.0" prefHeight="18.0" prefWidth="164.0" text="Введите имя пользователя:" />
-      <Button fx:id="btnCancel" layoutX="474.0" layoutY="361.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Отмена" />
-      <Button fx:id="btnOkForm" layoutX="551.0" layoutY="361.0" mnemonicParsing="false" onAction="#onOkFormButtonClick" text="Ок" />
+      <Label layoutX="14.0" layoutY="36.0" prefHeight="18.0" prefWidth="150.0" text="Введите имя пользователя:" />
+      <Button fx:id="btnCancel" layoutX="477.0" layoutY="303.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Отмена" />
+      <Button fx:id="btnOkForm" layoutX="549.0" layoutY="303.0" mnemonicParsing="false" onAction="#onOkFormButtonClick" text="Ок" />
       <TextField fx:id="fieldUsernameForm" layoutX="170.0" layoutY="32.0" prefHeight="26.0" prefWidth="411.0" promptText="имя пользователя" />
+      <Label layoutX="45.0" layoutY="219.0" prefHeight="18.0" prefWidth="122.0" text="Выберите должность:" />
+      <Label layoutX="75.0" layoutY="144.0" prefHeight="18.0" prefWidth="90.0" text="Введите пароль:" />
+      <Label layoutX="74.0" layoutY="182.0" prefHeight="18.0" prefWidth="97.0" text="Выберите отдел:" />
+      <Label layoutX="92.0" layoutY="108.0" prefHeight="18.0" prefWidth="73.0" text="Введите имя:" />
+      <Label layoutX="60.0" layoutY="73.0" prefHeight="18.0" prefWidth="103.0" text="Введите фамилию:" />
+      <TextField fx:id="fieldLastnameForm" layoutX="170.0" layoutY="69.0" prefHeight="26.0" prefWidth="411.0" promptText="фамилия" />
+      <TextField fx:id="fieldFirstnameForm" layoutX="170.0" layoutY="104.0" prefHeight="26.0" prefWidth="411.0" promptText="имя" />
+      <TextField fx:id="fieldPasswordForm" layoutX="170.0" layoutY="140.0" prefHeight="26.0" prefWidth="411.0" promptText="пароль" />
+      <Label layoutX="43.0" layoutY="256.0" prefHeight="18.0" prefWidth="122.0" text="Выберите компьютер:" />
+      <ChoiceBox fx:id="choiceBoxDepartment" layoutX="170.0" layoutY="178.0" prefHeight="26.0" prefWidth="411.0" />
+      <ChoiceBox fx:id="choiceBoxPosition" layoutX="170.0" layoutY="215.0" prefHeight="26.0" prefWidth="411.0" />
+      <ChoiceBox fx:id="choiceBoxComp" layoutX="170.0" layoutY="252.0" prefHeight="26.0" prefWidth="411.0" />
+      <Label fx:id="staticAuthError" layoutX="230.0" layoutY="306.0" prefHeight="18.0" prefWidth="234.0" />
    </children>
 </AnchorPane>

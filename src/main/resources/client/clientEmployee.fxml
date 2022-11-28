@@ -10,9 +10,9 @@
     <children>
       <Accordion layoutX="2.0" layoutY="200.0" />
       <Accordion layoutX="31.0" layoutY="237.0" />
-      <Label fx:id="staticUsername" layoutX="359.0" layoutY="5.0" text="Имя пользователя" />
+      <Label fx:id="staticUsername" layoutX="371.0" layoutY="5.0" text="Пользователь" />
       <Button fx:id="btnLogout" layoutX="382.0" layoutY="29.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" prefHeight="26.0" prefWidth="54.0" text="Выйти" />
-      <Label layoutX="216.0" layoutY="33.0" text="Рейтинг" />
+      <Label layoutX="208.0" layoutY="20.0" text="Статистика" />
       <ListView fx:id="elListRatio" layoutX="15.0" layoutY="64.0" prefHeight="246.0" prefWidth="445.0" />
     </children>
 </AnchorPane>
