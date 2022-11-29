@@ -1,19 +1,18 @@
 package client.mvc;
 
+
 public final class SingletonModel {
     private static volatile SingletonModel instance;
 
     public static Model model;
     public static String isConnected;
     public static String searchType;
-    public static String formType;
     public static String editUser;
 
     private SingletonModel() {
         this.model = new Model();
         this.isConnected = null;
         this.searchType = "";
-        this.formType = "";
         this.editUser = "";
     }
 
@@ -31,14 +30,6 @@ public final class SingletonModel {
 
     public static void setSearchType(String searchType) {
         SingletonModel.searchType = searchType;
-    }
-
-    public static String getFormType() {
-        return formType;
-    }
-
-    public static void setFormType(String formType) {
-        SingletonModel.formType = formType;
     }
 
     public static String getEditUser() {

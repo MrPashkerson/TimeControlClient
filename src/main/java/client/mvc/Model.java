@@ -6,25 +6,31 @@ import client.mvc.observer.Observer;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import java.awt.Desktop;
 import java.io.File;
 
 public class Model implements Observer {
     private List<Listener> listeners;
+    private List<AppStatInfo> appStatInfo;
     private String ip = "";
     private int port = 0;
     private String login = "";
     private String password = "";
     private Socket client = null;
+    private String user = null;
     PrintWriter out = null;
     BufferedReader in = null;
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyyyy");
 
     Model() {
         this.listeners = new LinkedList<>();
+        this.appStatInfo = new ArrayList<>();
     }
 
     // регистрация слушателя
@@ -71,16 +77,24 @@ public class Model implements Observer {
     }
 
     public void disconnectServer() {
+        for (AppStatInfo arg : appStatInfo) {
+            arg.setAppEndTime(Instant.now());
+            out.println("addStat" + "&" + arg.getAppName() + "; " + arg.calcElapsedTimeInMillis() + "; " + getUser().split("; ")[7] + "; " + dtf.format(LocalDate.now()));
+        }
+        user = null;
         out.println("Disconnect");
     }
 
-    public String authorization() throws IOException {
+    public String authorization() throws IOException, InterruptedException {
         out.println("Authorization" + "&" + login + "&" + password);
 
         String line = in.readLine();
         if (Objects.equals(line, "Пользователь не найден!") || Objects.equals(line, "Пароль неверный!")) {
             return line;
         } else {
+            user = line;
+            AppStatusCheck appStatusCheck = new AppStatusCheck();
+
             String[] args = line.split("; ");
             switch (args[5]) {
                 case "4" -> notifyListeners("switchToSceneAdmin");
@@ -91,8 +105,83 @@ public class Model implements Observer {
         }
     }
 
+    public boolean isUser() {
+        return user != null;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
     public void logout() {
+        for (AppStatInfo arg : appStatInfo) {
+            arg.setAppEndTime(Instant.now());
+            out.println("addStat" + "&" + arg.getAppName() + "; " + arg.calcElapsedTimeInMillis() + "; " + getUser().split("; ")[7] + "; " + dtf.format(LocalDate.now()));
+        }
+        user = null;
         out.println("Logout");
+    }
+
+    class AppStatusCheck implements Runnable {
+        Thread thread;
+        public AppStatusCheck()
+        {
+            this.thread = new Thread(this, "appStat Thread");
+            this.thread.start();
+        }
+        @Override
+        public void run() {
+            while (isUser()) {
+                try {
+                    Thread.sleep(10000);
+                    Process process = new ProcessBuilder("powershell","\"gps| ? {$_.mainwindowtitle.length -ne 0} | Format-Table -HideTableHeaders  name").start();
+                    new Thread(() -> {
+                        Scanner sc = new Scanner(process.getInputStream());
+                        if (sc.hasNextLine()) sc.nextLine();
+                        List<String> runAppList = new ArrayList<>();
+                        while (sc.hasNextLine()) {
+                            String line = sc.nextLine();
+                            runAppList.add(line);
+                        }
+                        boolean flagNew = false;
+                        boolean flagOld = false;
+                        for (AppStatInfo arg : appStatInfo) {
+                            for (String obj : runAppList) {
+                                if(Objects.equals(arg.getAppName(), obj)) {
+                                    flagOld = true;
+                                    break;
+                                }
+                            }
+                            if (!flagOld) {
+                                arg.setAppEndTime(Instant.now());
+                            } else {
+                                flagOld = false;
+                            }
+                        }
+                        for (String obj : runAppList) {
+                            for (AppStatInfo arg : appStatInfo) {
+                                if(Objects.equals(obj, arg.getAppName())) {
+                                    flagNew = true;
+                                    break;
+                                }
+                            }
+                            if (!flagNew) {
+                                AppStatInfo newAppStatInfo = new AppStatInfo(obj, Instant.now());
+                                appStatInfo.add(newAppStatInfo);
+                            } else {
+                                flagNew = false;
+                            }
+                        }
+                    }).start();
+                    process.waitFor();
+                }
+                catch (InterruptedException e) {
+                    System.out.println("Caught:" + e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 
     public void seeReport() throws IOException {
@@ -105,7 +194,9 @@ public class Model implements Observer {
         if(!Objects.equals(response, "")) {
             String[] userArgs = selectedItem.split("; ");
             String[] responseArgs = response.split("&");
+            System.out.println(Arrays.toString(responseArgs));
             String[] dateArgs = responseArgs[0].split("; ");
+            System.out.println(Arrays.toString(dateArgs));
             try {
                 File myObj = new File("reports\\" + userArgs[2] + "_" + dateArgs[4] + ".txt");
                 myObj.createNewFile();
@@ -115,8 +206,8 @@ public class Model implements Observer {
                 for (String arg : responseArgs) {
                     writeArgs = arg.split("; ");
                     myWriter.write("Название приложения: " + writeArgs[1]
-                            + "; Время работы: " + writeArgs[2]
-                            + "; ID компьютера: " + writeArgs[3] + ";\n");
+                            + "; Время работы: " + Duration.ofMillis(Long.parseLong(writeArgs[2])).toSeconds()
+                            + "секунд; ID компьютера: " + writeArgs[3] + ";\n\n");
                 }
                 myWriter.close();
             } catch (IOException e) {
@@ -145,6 +236,11 @@ public class Model implements Observer {
     public String searchUser(String usernameSearch) throws IOException {
         out.println("searchUser" + "&" + usernameSearch);
         return in.readLine();
+    }
+
+    public String[] getAllUserStat() throws IOException {
+        out.println("getAllUserStat");
+        return in.readLine().split("&");
     }
 
     public String[] getAllEmployee() throws IOException {

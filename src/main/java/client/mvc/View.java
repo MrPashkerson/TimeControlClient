@@ -6,20 +6,28 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class View implements Listener {
     SingletonModel singletonModel = SingletonModel.getInstance();
 
-
+    @FXML
+    PieChart pieChartData = new PieChart();
     @FXML
     ListView<String> elListUserSearch = new ListView<>();
+    @FXML
+    ListView<String> elListRatio = new ListView<>();
     public Label staticAuthError;
 
     public TextField fieldUsernameSearch;
@@ -47,6 +55,27 @@ public class View implements Listener {
     public Button btnOkForm;
     public Button btnCancel;
     public Button btnSearch;
+    public Button btnRefreshStat;
+
+
+    public void onRefreshStatButtonClick() throws IOException {
+        String[] args = singletonModel.model.getAllUserStat();
+        if (args != null && args.length > 0 && !Objects.equals(args[0], "")) {
+            elListRatio.getItems().clear();
+            pieChartData.getData().clear();
+            for (String arg : args) {
+                String[] obj = arg.split("; ");
+                AppStatInfo newAppStatInfo = new AppStatInfo(obj[1], Instant.now());
+                newAppStatInfo.setTimeElapsed(obj[2]);
+                elListRatio.getItems().add(newAppStatInfo.calcElapsedTimeInFormat());
+
+                PieChart.Data slice = new PieChart.Data(obj[1], Double.parseDouble(obj[2]));
+                pieChartData.getData().add(slice);
+                pieChartData.setLegendVisible(false);
+            }
+        }
+
+    }
 
     public void onLogoutButtonClick() {
         singletonModel.model.logout();
@@ -71,7 +100,6 @@ public class View implements Listener {
     }
 
     public void onAddUserButtonClick() {
-        singletonModel.setFormType("add");
         openScene(btnAddUser, "clientUserForm");
     }
 
@@ -113,7 +141,6 @@ public class View implements Listener {
                     stage.close();
                 }
                 case "edit" -> {
-                    singletonModel.setFormType("edit");
                     singletonModel.setEditUser(selectedItem);
                     openScene(btnOkSearch, "clientUserForm");
                     Stage stage = (Stage) btnOkSearch.getScene().getWindow();
