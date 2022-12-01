@@ -18,7 +18,7 @@
 - Interaction is implemented through a GUI.
 - Business logic of the project is implemented on the server.
 
-**Known troubles:**
+**Known issues:**
 
 - Client app hangs, when try to login with server offline.
 - No fool check for forms.
