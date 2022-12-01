@@ -6,6 +6,8 @@
   - MVC (Model-View-Controller)
 - Behavioral:
   - Observer
+- Creational
+  - Singleton
 
 **Used technologies:**
 
