@@ -77,9 +77,11 @@ public class Model implements Observer {
     }
 
     public void disconnectServer() {
-        for (AppStatInfo arg : appStatInfo) {
-            arg.setAppEndTime(Instant.now());
-            out.println("addStat" + "&" + arg.getAppName() + "; " + arg.calcElapsedTimeInMillis() + "; " + getUser().split("; ")[7] + "; " + dtf.format(LocalDate.now()));
+        if (!appStatInfo.isEmpty()) {
+            for (AppStatInfo arg : appStatInfo) {
+                arg.setAppEndTime(Instant.now());
+                out.println("addStat" + "&" + arg.getAppName() + "; " + arg.calcElapsedTimeInMillis() + "; " + getUser().split("; ")[7] + "; " + dtf.format(LocalDate.now()));
+            }
         }
         user = null;
         out.println("Disconnect");
@@ -96,9 +98,9 @@ public class Model implements Observer {
             AppStatusCheck appStatusCheck = new AppStatusCheck();
 
             String[] args = line.split("; ");
-            switch (args[5]) {
-                case "4" -> notifyListeners("switchToSceneAdmin");
-                case "5" -> notifyListeners("switchToSceneReportsAnalyst");
+            switch (args[6]) {
+                case "13" -> notifyListeners("switchToSceneAdmin");
+                case "14" -> notifyListeners("switchToSceneReportsAnalyst");
                 default -> { notifyListeners("switchToSceneEmployee"); }
             }
             return "";
@@ -119,6 +121,7 @@ public class Model implements Observer {
             out.println("addStat" + "&" + arg.getAppName() + "; " + arg.calcElapsedTimeInMillis() + "; " + getUser().split("; ")[7] + "; " + dtf.format(LocalDate.now()));
         }
         user = null;
+        appStatInfo.clear();
         out.println("Logout");
     }
 
