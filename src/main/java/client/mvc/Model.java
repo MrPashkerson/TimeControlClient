@@ -96,7 +96,9 @@ public class Model implements Observer {
         } else {
             user = line;
             AppStatusCheck appStatusCheck = new AppStatusCheck();
-
+            if (Objects.equals(user, null)) {
+                return "Перезапустите сервер!";
+            }
             String[] args = line.split("; ");
             switch (args[6]) {
                 case "13" -> notifyListeners("switchToSceneAdmin");
