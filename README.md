@@ -22,6 +22,6 @@
 
 **Known issues:**
 
-- Client app hangs, when try to login with server offline.
-- No fool check for forms.
-- Can't close app from authorization window.
+- ~~Client app hangs, when try to login with server offline.~~
+- ~~No fool check for forms.~~
+- ~~Can't close app from authorization window.~~
