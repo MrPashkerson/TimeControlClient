@@ -161,8 +161,8 @@ public class View implements Listener {
         equipment = equipment.split(" ")[0];
         if (Objects.equals(username, "") || Objects.equals(lastname, "")
                 || Objects.equals(firstname, "") || Objects.equals(password, "")
-                || Objects.equals(department, "") || Objects.equals(position, "")
-                || Objects.equals(equipment, "")) {
+                || Objects.equals(department, null) || Objects.equals(position, null)
+                || Objects.equals(equipment, null)) {
             staticAuthError.setText("Заполните все поля!");
             staticAuthError.setTextFill(Color.color(1,0,0));
         } else {
